@@ -37,14 +37,17 @@ const getPagedMovies = async (pageNumber, perPage) => {
 
 const createMovie = async (movie) => {
     try {
+        console.log("Req Body", movie);
         let response = await axios.post(`${baseUrl}/movies/new`, movie);
         if (response && response.status == 200 && response.data && response.data.data) {
             let movie = response.data.data;
             store.dispatch(updateMovies(movie));
+            window.location.reload();
         }
     }
     catch (err) {
         console.log("Could not get all movies", err);
+        alert("Could not add movie " + String(err));
     }
 };
 

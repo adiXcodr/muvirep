@@ -41,10 +41,7 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     if (movies && movies.length > 0) {
-      let toSet = [];
-      for (let i = 0; i < 10; i++) {
-        toSet.push(movies[0])
-      }
+      let toSet = movies;
       setTempMovies(toSet);
       setOrgMovies(toSet);
     }
