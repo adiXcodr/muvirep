@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { withRouter, Redirect } from 'react-router-dom';
-import { Card, CardActions, CardContent, Button, Typography, Badge, TextField, InputAdornment } from '@material-ui/core';
+import { Card, CardActions, CardContent, Button, Typography, Badge, TextField, InputAdornment, Paper, Grid } from '@material-ui/core';
 import { useSelector, useDispatch } from "react-redux";
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SearchIcon from '@material-ui/icons/Search';
-import moment from "moment";
 import { isMobile } from "react-device-detect";
 import { getAllMovies, getPagedMovies } from "../api/movieLinks";
-import firebase from "../firebaseHandler";
+import MovieCard from '../Components/MovieCard';
 
 const PAGE_LIMIT = 5;
 
@@ -16,7 +14,7 @@ const Dashboard = (props) => {
   const dispatch = useDispatch();
   const movies = useSelector((state) => state.media.movies);
   const [orgMovies, setOrgMovies] = useState([]);
-  const [Movies, setMovies] = useState([]);
+  const [tempMovies, setTempMovies] = useState([]);
   const [onPage, setOnPage] = useState(1);
 
   const handleSearch = (e) => {
@@ -24,14 +22,14 @@ const Dashboard = (props) => {
     console.log("Search Movies Value", query);
     if (query != "") {
       query = query.toLowerCase();
-      let result = Movies.filter(item => (
-        item.name + item.courseCode + item.instructorName + item.instructorEmail
+      let result = tempMovies.filter(item => (
+        item.name
       ).toLowerCase().indexOf(query) > -1);
       console.log("Result is", result)
-      setMovies(result);
+      setTempMovies(result);
     }
     else {
-      setMovies(orgMovies);
+      setTempMovies(orgMovies);
     }
 
   };
@@ -41,9 +39,20 @@ const Dashboard = (props) => {
     getPagedMovies(onPage, PAGE_LIMIT);
   }, []);
 
+  useEffect(() => {
+    if (movies && movies.length > 0) {
+      let toSet = [];
+      for (let i = 0; i < 10; i++) {
+        toSet.push(movies[0])
+      }
+      setTempMovies(toSet);
+      setOrgMovies(toSet);
+    }
+  }, [movies]);
+
 
   return (
-    <div style={{ width: isMobile ? "100%" : "80%", marginLeft: "auto", marginRight: "auto", marginTop: 20 }}>
+    <div style={{ width: isMobile ? "95%" : "80%", marginLeft: "auto", marginRight: "auto", marginTop: 20 }}>
 
       <div style={{}}>
 
@@ -86,7 +95,7 @@ const Dashboard = (props) => {
                 ),
               }}
               style={{
-                width: "80%",
+                width: isMobile ? "100%" : "80%",
                 marginLeft: "auto",
                 marginRight: "auto",
                 marginBottom: isMobile ? 20 : 0
@@ -97,56 +106,22 @@ const Dashboard = (props) => {
           </div>
         </Card>
 
-        {Movies.map((course) =>
-          <Card style={{
-            width: "100%",
-            marginLeft: "auto",
-            marginRight: "auto",
-            marginBottom: 50,
-            transition: "0.3s",
-            boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
-            "&:hover": {
-              boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
-            },
-            borderRadius: 30,
-            padding: 20,
-            paddingTop: 30
-          }} >
 
-            <CardContent>
-              <Badge badgeContent={course.courseCredits} color="primary" style={{ float: "right" }}>
-                <MonetizationOnIcon />
-              </Badge>
-              <Typography color="textSecondary" gutterBottom>
-                {course.courseCode}
-              </Typography>
-              <Typography variant="h5" component="h2">
-                {course.name}
-              </Typography>
+        <Grid container spacing={2} justify="center" >
+          <Grid item xs={12} >
+            <Grid container justify="center" spacing={isMobile ? 0 : 5}>
 
-              <Typography variant="h6" component="h4" color="textSecondary">
-                Posted By
-              </Typography>
-              <Typography >
-                {course.instructorName} - {course.instructorEmail}
-              </Typography>
+              {tempMovies.map((movie) =>
+                <Grid item xs={12} lg={3}>
+                  <MovieCard movie={movie} />
+                </Grid>
+              )}
 
-              <Typography >
-                {moment(course.datePosted).fromNow()}
-              </Typography>
+            </Grid>
+          </Grid>
 
-            </CardContent>
+        </Grid>
 
-            <CardActions>
-              <Button size="small" onClick={() => history.push({
-                pathname: "/dashboard/giveFeedback",
-                state: { courseDetails: course }
-              })}>Give Feedback</Button>
-            </CardActions>
-
-
-          </Card>
-        )}
       </div>
 
     </div>

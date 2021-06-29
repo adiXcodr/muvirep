@@ -3,10 +3,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Route, Link, Switch, withRouter } from 'react-router-dom';
-import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,9 +14,10 @@ import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
-import logo from "../Resources/Images/feedifyLogo.png";
 import MovieFilterIcon from '@material-ui/icons/MovieFilter';
 import QueuePlayNextIcon from '@material-ui/icons/QueuePlayNext';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import { colors } from "../constants";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -101,7 +100,7 @@ function MiniDrawer(props) {
                             [classes.hide]: open,
                         })}
                     >
-                        <Avatar alt={"FF"} src={logo} style={{ width: 40, height: 40 }} />
+                        <PlayCircleFilledIcon style={{ color: colors.primary, width: 40, height: 40 }} />
                     </IconButton>
                     <Typography variant="h6" noWrap style={{ fontWeight: "bold" }}>
                         Muvirep

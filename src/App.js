@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from "./redux/store";
 import { setAuth, saveUserData } from "./redux/actions";
 import axios from "axios";
+import "video-react/dist/video-react.css";
 import { colors, baseUrl } from "./constants";
 
 const theme = createMuiTheme({

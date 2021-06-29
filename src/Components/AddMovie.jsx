@@ -1,28 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, withRouter } from 'react-router-dom';
-import { Card, CardActions, CardContent, Button, Typography, TextField } from '@material-ui/core';
+import { Card, CardActions, CardContent, Button, Typography, TextField, Select, MenuItem } from '@material-ui/core';
 import firebase from "../firebaseHandler";
-const db = firebase.firestore();
+// const storage = firebase.storage();
 
 const AddCourse = (props) => {
     const { history } = props;
     const location = useLocation();
     const params = location.state;
     const [name, setName] = useState("");
-    const [courseCode, setCourseCode] = useState("");
-    const [instructorName, setInstructorName] = useState("");
+    const [language, setLanguage] = useState("");
+    const [year, setYear] = useState("2021");
+    const [yearList, setYearList] = useState([]);
     const [courseCredits, setCourseCredits] = useState("0");
     const [instructorEmail, setInstructorEmail] = useState("");
     const [edit, setEdit] = useState(false);
 
-    const handleAddCourse = () => {
+    const handleAddMovie = () => {
 
 
     };
 
+    const handleYearList = () => {
+        let currentYear = new Date().getFullYear(), years = [];
+        let startYear = 1895;
+        while (startYear <= currentYear) {
+            years.push(String(startYear++));
+        }
+        setYearList(years);
+    };
+
 
     useEffect(() => {
-
+        handleYearList();
     }, []);
 
     return (
@@ -46,13 +56,13 @@ const AddCourse = (props) => {
 
                 <CardContent>
                     <Typography variant="h5" component="h2">
-                        Add Course Details
+                        Add a movie
                     </Typography>
 
                     <TextField
-                        id="courseName"
-                        label="Course Name"
-                        placeholder="Enter the course name"
+                        id="name"
+                        label="Name"
+                        placeholder="Enter the movie name"
                         variant="outlined"
                         onChange={(e) => setName(e.target.value)}
                         style={{
@@ -61,39 +71,35 @@ const AddCourse = (props) => {
                         }}
                         value={name}
                     />
-                    {!edit &&
-                        <TextField
-                            id="courseCode"
-                            label="Course Code"
-                            placeholder="Enter the course code"
-                            variant="outlined"
-                            onChange={(e) => setCourseCode(e.target.value)}
-                            style={{
-                                width: "100%",
-                                marginTop: 20
-                            }}
-                            value={courseCode}
-                        />
-                    }
-
-
                     <TextField
-                        id="courseCredits"
-                        label="Course Credits"
-                        placeholder="Enter the number of credits"
+                        id="language"
+                        label="Language"
+                        placeholder="Enter the movie language"
                         variant="outlined"
-                        onChange={(e) => setCourseCredits(e.target.value)}
+                        onChange={(e) => setLanguage(e.target.value)}
                         style={{
                             width: "100%",
                             marginTop: 20
                         }}
-                        value={courseCredits}
+                        value={language}
                     />
+
+                    <Select
+                        labelId="year-select-label"
+                        id="year-select"
+                        value={year}
+                        onChange={(e) => setYear(e.target.value)}
+                        variant="outlined"
+                        style={{ width: "100%", marginBottom: 30, textAlign: "left", marginTop: 20 }}
+                    >
+                        {yearList.map((val) => <MenuItem value={val}>{val}</MenuItem>)}
+                    </Select>
+
 
 
                 </CardContent>
-                <Button variant="contained" color="primary" style={{ marginBottom: 20, marginTop: 20 }} onClick={handleAddCourse}>
-                    {edit ? "Edit" : "Add"} Course
+                <Button variant="contained" color="primary" style={{ marginBottom: 20, marginTop: 20 }} onClick={handleAddMovie}>
+                    Add Movie
                 </Button>
             </Card>
         </div >
